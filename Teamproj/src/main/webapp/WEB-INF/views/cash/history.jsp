@@ -15,6 +15,7 @@
 </script>
 </head>
 <body>
+
 	<c:forEach var="vo" items="${ m_list }">
 	<fmt:parseDate var="dateFmt" value="${vo.day}" pattern="yyyy-MM"/>
 	<fmt:formatDate var="date" pattern="MM" value="${dateFmt}" />
