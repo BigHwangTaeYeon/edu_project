@@ -16,5 +16,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="cash_insert" parameterType="vo.CashVO">	<!-- 왜 갑자기 income 또는 expense가 null 값을 허용하지 않아 jdbcType을 넣어야하는가? -->
 		insert into cashbook values(seq_cb_idx.nextVal, #{content}, #{income, jdbcType=INTEGER}, #{expense, jdbcType=INTEGER}, CURRENT_DATE, #{id})
 	</insert>
+	
+	<update id="cash_update" parameterType="vo.CashVO">
+		update cashbook set content=#{content}, income=#{income, jdbcType=INTEGER}
+		where idx=#{idx}
+	</update>
 
 </mapper>

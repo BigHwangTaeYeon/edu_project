@@ -35,5 +35,10 @@ public class CashDAO {
 		int res = sqlSession.insert("cash.cash_insert", vo);
 		return res;
 	}
+	
+	public int update(CashVO vo) {
+		int res = sqlSession.update("cash.cash_update", vo);
+		return res;
+	}
 
 }

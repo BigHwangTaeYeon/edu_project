@@ -14,13 +14,12 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> <%-- 구글 그래프 --%>
 	<script src="${pageContext.request.contextPath}/resources/js/httpRequest.js"></script>	<%-- Ajax --%>
-	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>	<%-- jquery --%>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>	<%-- jquery --%>
 <script type="text/javascript">
 
 	/* 삭제버튼 클릭 */
 	function del(f) {
-		location.href='delete.do?idx='+f.idx.value;
+		//location.href='delete.do?idx='+f.idx.value;
+		f.submit();
 	}//del()
 
 	/* 저장버튼 클릭 */
@@ -137,7 +136,7 @@
 						<td>${vo.day}</td>
 						<%-- <td><%=c.getWriteday(${vo.day}) %></td> --%>
 						<td>
-							<form>
+							<form method="POST" action="delete.do?idx=${vo.idx}&id=${param.id}">
 								<input type="hidden" name="idx" value="${vo.idx}">	
 								<!-- 꼭 idx hidden으로 가져와야 del()함수에 넣을 수 있다 -->
 								<input type="button" value="삭제" onclick="del(this.form);">

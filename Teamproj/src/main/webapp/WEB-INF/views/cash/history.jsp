@@ -8,11 +8,29 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript">
-	function del(f) {
-		location.href='delete.do?idx='+f.idx.value;
-	}
-</script>
+	<script type="text/javascript">
+		function del(f) {
+			location.href='delete.do?idx='+f.idx.value;
+		}
+		function modify(f) {
+			/* location.href='cash_update.do?idx='+f.idx.value; */
+			f.submit();
+		}
+	</script>
+	<script>	<%-- modify --%>
+		function change(){
+			document.getElementById("change_1").type="text";
+			document.getElementById("change_2").type="text";
+			document.getElementById("change_3").type="text";
+
+			let x = document.getElementsByClassName("change_text_1")[0];
+			let y = document.getElementsByClassName("change_text_2")[0];
+			let z = document.getElementsByClassName("change_text_3")[0];
+			x.innerText="";
+			y.innerText="";
+			z.innerText="";
+		}
+	</script>
 </head>
 <body>
 
@@ -25,9 +43,16 @@
 			        <form>
 				        <ul>
 					       	<li>
-						    	수입  내역 : ${vo.content} 금액 : ${vo.income} 날짜 : ${vo.day} 입니다.
-						    	<input type="hidden" name="idx" value="${vo.idx}">
-								<input type="button" value="삭제" onclick="del(this.form);">
+					       		<form>
+							    	수입  내역 : <span class="change_text_1">${vo.content}</span><input type="hidden" name="content" id="change_1" value="${vo.content}"> 
+							    	금액 : <span class="change_text_2">${vo.income}</span><input type="hidden" name="income" id="change_2" value="${vo.income}"> 
+							    	날짜 : <span class="change_text_3">${vo.day}</span><input type="hidden" name="day" id="change_3" value="${vo.day}"> 입니다.
+							    	
+							    	<input type="hidden" name="idx" value="${vo.idx}">
+									<input onclick="change();" type="button" value="수정"></input>
+									<input type="button" value="변경완료" onclick="modify(this.form);"></input>
+							    	<input type="button" value="삭제" onclick="del(this.form);">
+						    	</form>
 						    </li>
 					    </ul>
 					</form>

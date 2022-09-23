@@ -36,9 +36,9 @@ public class CashController {
 	}
 
 	@RequestMapping("/delete.do")
-	public String delete(int idx) {	// visit_list.jsp에서 idx를 받고
+	public String delete(int idx, String id) {	// visit_list.jsp에서 idx를 받고
 		cash_dao.delete(idx);// dao로 idx를 보낸다
-		return "redirect:list.do";
+		return "redirect:list.do?id="+id;
 	}
 	
 	@RequestMapping("/insert_income.do")
@@ -52,6 +52,12 @@ public class CashController {
 	public String insert_expense(CashVO vo) {
 		int res = cash_dao.insert(vo);
 		return "redirect:list.do?id="+vo.getId();
+	}
+	
+	@RequestMapping("/modity.do")
+	public String modify(CashVO vo) {
+		int res = cash_dao.update(vo);
+		return "redirect:history.do";
 	}
 	
 }
