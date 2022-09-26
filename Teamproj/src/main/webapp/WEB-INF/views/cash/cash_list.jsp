@@ -63,7 +63,7 @@
 	</c:forEach>
 	
 	income_list.push("${total_income}");	
-	expense_list.push("${total_expense}");	
+	expense_list.push("${total_expense}");
     
     <c:set var="total_income" value="0" />		
 	<c:set var="total_expense" value="0" />		
@@ -166,38 +166,25 @@
 
 	
 	        <!-- insert -->
-	     	<p>
-	     	<form method="POST" action="insert_income.do?id=${user.id}">
-		소득: <input type="text" name="content" placeholder="내용" id="cont_1" v-model.trim="addText_1">
-		     <input type="text" name="income" placeholder="금액" v-model.number="income" v-on:keyup.enter="fixIncome">
-		    <%--  <input type="hidden" name="id" value="${user.id}"> --%>
-		     <input type="button" value="추가" onclick="send_income(this.form);" v-on:click="fixIncome">
-	        </form>
-	        </p>
+	     	
+		     	<form method="POST" action="insert_income.do?id=${user.id}">
+			소득: <input type="text" name="content" placeholder="내용" id="cont_1" v-model.trim="addText_1">
+			     <input type="text" name="income" placeholder="금액" v-model.number="income" v-on:keyup.enter="fixIncome">
+			    <%--  <input type="hidden" name="id" value="${user.id}"> --%>
+			     <input type="button" value="추가" onclick="send_income(this.form);" v-on:click="fixIncome">
+		        </form>
 	        
-	        <form method="POST" action="insert_expense.do?id=${user.id}">
-	         지출: <input type="text" name="content" placeholder="내용" id="cont" v-model.trim="addText">
-	         <input type="text" name="expense" placeholder="금액" v-model.number="addPrice" v-on:keyup.enter="addList">
-		    <%--  <input type="hidden" name="id" value="${user.id}"> --%>
-	         <input type="button" value="추가" onclick="send_expense(this.form);" v-on:click="addList">
+	        
+	        <form method="POST" action="insert_income.do?id=${param.id}">
+		        지출: <input type="text" name="content" placeholder="내용" id="cont" v-model.trim="addText">
+		        <input type="text" name="expense" placeholder="금액" v-model.number="addPrice" v-on:keyup.enter="addList">
+			    <%--  <input type="hidden" name="id" value="${user.id}"> --%>
+		        <input type="button" value="추가" onclick="send_income(this.form);" v-on:click="addList">
 	        </form>
 	        <!-- insert -->
 	        
         <hr>
     </div>
-    
-    <form method="POST" action="Article.do?id=${user.id}">
-	    <c:forEach var="vo" items="${list}">
-		<form>
-			<div>${text.idx}</div>
-			<div>${text.id}</div>
-			<div>${text.title}</div>
-			<div><pre>${vo.content}</pre></div>
-			<div>${text.f_time}</div>
-			<div>${text.l_time}</div>
-		</form>
-		</c:forEach>
-    </form>
     
 	<br><br>
 	<div id="chart_div"></div>

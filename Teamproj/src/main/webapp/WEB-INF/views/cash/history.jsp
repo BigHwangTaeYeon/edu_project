@@ -2,60 +2,88 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+	<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript">
+
 		function del(f) {
-			location.href='delete.do?idx='+f.idx.value;
-		}
-		function modify(f) {
-			/* location.href='cash_update.do?idx='+f.idx.value; */
 			f.submit();
 		}
-	</script>
-	<script>	<%-- modify --%>
-		function change(){
-			document.getElementById("change_1").type="text";
-			document.getElementById("change_2").type="text";
-			document.getElementById("change_3").type="text";
-
-			let x = document.getElementsByClassName("change_text_1")[0];
-			let y = document.getElementsByClassName("change_text_2")[0];
-			let z = document.getElementsByClassName("change_text_3")[0];
-			x.innerText="";
-			y.innerText="";
-			z.innerText="";
+		
+		function modify(f) {
+			f.submit();
+			/* location.href='modity.do?idx='+f.idx.value; */
 		}
+		
+		
+		
 	</script>
+
 </head>
 <body>
-
-	<c:forEach var="vo" items="${ m_list }">
+	<c:forEach var="vo" items="${ m_list }" varStatus="cnt">
+	<c:set var="count" value="${vo.idx}" />
 	<fmt:parseDate var="dateFmt" value="${vo.day}" pattern="yyyy-MM"/>
 	<fmt:formatDate var="date" pattern="MM" value="${dateFmt}" />
 		<c:forEach var="month" begin="1" end="12">
-			<c:if test="${date == month}">
+			<c:if test="${date == month}"> 
 				<c:if test="${vo.income != null}">
-			        <form>
 				        <ul>
 					       	<li>
-					       		<form>
-							    	수입  내역 : <span class="change_text_1">${vo.content}</span><input type="hidden" name="content" id="change_1" value="${vo.content}"> 
-							    	금액 : <span class="change_text_2">${vo.income}</span><input type="hidden" name="income" id="change_2" value="${vo.income}"> 
-							    	날짜 : <span class="change_text_3">${vo.day}</span><input type="hidden" name="day" id="change_3" value="${vo.day}"> 입니다.
-							    	
-							    	<input type="hidden" name="idx" value="${vo.idx}">
-									<input onclick="change();" type="button" value="수정"></input>
-									<input type="button" value="변경완료" onclick="modify(this.form);"></input>
-							    	<input type="button" value="삭제" onclick="del(this.form);">
-						    	</form>
-						    </li>
+					       		<form method="POST" action="modify.do?idx=${vo.idx}&id=${param.id}">
+						       		<%-- 수입  내역 : <span class="text">${vo.content}</span><input type="hidden" name="content" class="change_text" value="${vo.content}" />
+									금액 : <span class="text">${vo.income}</span><input type="hidden" name="income" class="change_text" value="${vo.income}" /> 
+									날짜 : <span class="text">${vo.day}</span><input type="hidden" name="day" class="change_text" value="${vo.day}" /> 입니다.
+									 --%>
+									<%-- <input type="hidden" name="idx" value="${vo.idx}" />
+									<input type="button" value="수정" class="change" onclick="count(this.form)" />
+									<input type="hidden" value="변경완료" onclick="modify(this.form);" class="change_button" /> --%>
+								<script>
+									var bottom = "";
+									bottom += "수입내역 : <span class='text"+${vo.idx}+" text_content"+${vo.idx}+"'>${vo.content}</span><input type='hidden' name='content' class='change_text"+${vo.idx}+"' value='${vo.content}' />"
+									bottom += "금액 : <span class='text"+${vo.idx}+" text_income"+${vo.idx}+"'>${vo.income}</span><input type='hidden' name='income' class='change_text"+${vo.idx}+"' value='${vo.income}' />"
+									bottom += "날짜 : <span class='text"+${vo.idx}+" text_day"+${vo.idx}+"'>${vo.day}</span><input type='hidden' name='day' class='change_text"+${vo.idx}+"' value='${vo.day}' /> 입니다."
+									
+									bottom += "<input type='button' value='수정' class='change"+${vo.idx}+"' onclick='count(this.form)' />"
+									bottom += "<input type='hidden' value='변경완료' onclick='modify(this.form);' class='change_button"+${vo.idx}+"' />"
+									bottom += "<input type='hidden' value='취소' class='change_cancel"+${vo.idx}+" change_button"+${vo.idx}+"' />"
+
+									document.write(bottom);
+								</script>
+							    </form>
+							    <script>
+							    	$('.change'+${vo.idx}).click(function(){
+										$('.change_text'+${vo.idx}).attr('type','text');
+										$('.change_hidden'+${vo.idx}).attr('type','hidden');
+										$('.change_button'+${vo.idx}).attr('type','button');
+										$('.text'+${vo.idx}).empty();
+							    	});
+							    	$('.change_cancel'+${vo.idx}).click(function(){
+							    		let temp_content = '${vo.content}'
+								    	let temp_income = '${vo.income}'
+									    let temp_day = '${vo.day}'
+									    
+										$('.change_text'+${vo.idx}).attr('type','hidden');
+										$('.change_hidden'+${vo.idx}).attr('type','button');
+										$('.change_button'+${vo.idx}).attr('type','hidden');
+										$('.text_content'+${vo.idx}).append(temp_content);
+										$('.text_income'+${vo.idx}).append(temp_income);
+										$('.text_day'+${vo.idx}).append(temp_day);
+							    	});
+								</script>
+									
+							    <form method="POST" action="delete.do?idx=${vo.idx}&id=${param.id}">
+								    <input type="hidden" name="income" value="${vo.income}" />
+								    <input type="hidden" name="content" value="${vo.content}" />
+								    <input type="hidden" name="idx" value="${vo.idx}" />
+								    <input type="button" value="삭제" onclick="del(this.form);" />
+							    </form>
+							</li>
 					    </ul>
-					</form>
 				</c:if>
 			</c:if>
 		</c:forEach>
@@ -69,19 +97,68 @@
 		<c:forEach var="month" begin="1" end="12">
 			<c:if test="${date == month}">
 				<c:if test="${vo.income == null}">
-			        <form>
+			        
 				        <ul>
 					       	<li>
-								지출  내역 : ${vo.content} 금액 : ${vo.expense} 날짜 : ${vo.day} 입니다.
-						    	<input type="hidden" name="idx" value="${vo.idx}">
-								<input type="button" value="삭제" onclick="del(this.form);">
+					       		<form method="POST" action="modify.do?idx=${vo.idx}&id=${param.id}">
+						       		<%-- 수입  내역 : <span class="text">${vo.content}</span><input type="hidden" name="content" class="change_text" value="${vo.content}" />
+									금액 : <span class="text">${vo.income}</span><input type="hidden" name="income" class="change_text" value="${vo.income}" /> 
+									날짜 : <span class="text">${vo.day}</span><input type="hidden" name="day" class="change_text" value="${vo.day}" /> 입니다.
+									 --%>
+									<%-- <input type="hidden" name="idx" value="${vo.idx}" />
+									<input type="button" value="수정" class="change" onclick="count(this.form)" />
+									<input type="hidden" value="변경완료" onclick="modify(this.form);" class="change_button" /> --%>
+								<script>
+									var bottom = "";
+									bottom += "수입내역 : <span class='text"+${vo.idx}+" text_content"+${vo.idx}+"'>${vo.content}</span><input type='hidden' name='content' class='change_text"+${vo.idx}+"' value='${vo.content}' />"
+									bottom += "금액 : <span class='text"+${vo.idx}+" text_expense"+${vo.idx}+"'>${vo.expense}</span><input type='hidden' name='expense' class='change_text"+${vo.idx}+"' value='${vo.expense}' />"
+									bottom += "날짜 : <span class='text"+${vo.idx}+" text_day"+${vo.idx}+"'>${vo.day}</span><input type='hidden' name='day' class='change_text"+${vo.idx}+"' value='${vo.day}' /> 입니다."
+									
+									bottom += "<input type='hidden' name='idx' value='${vo.idx}' />"
+									bottom += "<input type='button' value='수정' class='change"+${vo.idx}+"' onclick='count(this.form)' />"
+									bottom += "<input type='hidden' value='변경완료' onclick='modify(this.form);' class='change_button"+${vo.idx}+"' />"
+									bottom += "<input type='hidden' value='취소' class='change_cancel"+${vo.idx}+" change_button"+${vo.idx}+"' />"
+
+									document.write(bottom);
+								</script>
+							    </form>
+							    <script>
+							    	$('.change'+${vo.idx}).click(function(){
+										$('.change_text'+${vo.idx}).attr('type','text');
+										$('.change_hidden'+${vo.idx}).attr('type','hidden');
+										$('.change_button'+${vo.idx}).attr('type','button');
+										$('.text'+${vo.idx}).empty();
+							    	});
+							    	$('.change_cancel'+${vo.idx}).click(function(){
+							    		let temp_content = '${vo.content}'
+								    	let temp_expense = '${vo.expense}'
+									    let temp_day = '${vo.day}'
+									    
+										$('.change_text'+${vo.idx}).attr('type','hidden');
+										$('.change_hidden'+${vo.idx}).attr('type','button');
+										$('.change_button'+${vo.idx}).attr('type','hidden');
+										$('.text_content'+${vo.idx}).append(temp_content);
+										$('.text_expense'+${vo.idx}).append(temp_expense);
+										$('.text_day'+${vo.idx}).append(temp_day);
+							    	});
+								</script>
+									
+							    <form method="POST" action="delete.do?idx=${vo.idx}&id=${param.id}">
+								    <input type="hidden" name="expense" value="${vo.expense}" />
+								    <input type="hidden" name="content" value="${vo.content}" />
+								    <input type="hidden" name="idx" value="${vo.idx}" />
+								    <input type="button" value="삭제" onclick="del(this.form);" />
+							    </form>
+							    
 						    </li>
 					    </ul>
-					</form>
+					
 				</c:if>
 			</c:if>
 		</c:forEach>
 	</c:forEach>
+
+	<hr>
 
 		<c:set var = "total" value = "0" />
 		<c:forEach var="result" items="${m_list}" varStatus="status">     

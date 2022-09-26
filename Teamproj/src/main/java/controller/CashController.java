@@ -48,16 +48,11 @@ public class CashController {
 		return "redirect:list.do?id="+vo.getId();
 	}
 	
-	@RequestMapping("/insert_expense.do")
-	public String insert_expense(CashVO vo) {
-		int res = cash_dao.insert(vo);
-		return "redirect:list.do?id="+vo.getId();
-	}
 	
-	@RequestMapping("/modity.do")
-	public String modify(CashVO vo) {
+	@RequestMapping("/modify.do")
+	public String modify(CashVO vo, String id) {
 		int res = cash_dao.update(vo);
-		return "redirect:history.do";
+		return "redirect:history.do?id="+id;
 	}
 	
 }

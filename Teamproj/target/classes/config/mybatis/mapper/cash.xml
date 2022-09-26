@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="cash_update" parameterType="vo.CashVO">
-		update cashbook set content=#{content}, income=#{income, jdbcType=INTEGER}
+		update cashbook set content=#{content, jdbcType=VARCHAR}, income=#{income, jdbcType=INTEGER}
 		where idx=#{idx}
 	</update>
 
